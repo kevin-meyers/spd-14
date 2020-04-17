@@ -13,8 +13,11 @@ data Planet
   | Uranus
   | Neptune
 
+secondsPerYearsOnEarth :: Float
+secondsPerYearsOnEarth = 31557600
+
 ageOn :: Planet -> Float -> Float
-ageOn Earth = (/ 31557600)
+ageOn Earth = (/ secondsPerYearsOnEarth)
 ageOn p = (/ orbitalPeriod p) . ageOn Earth
 
 orbitalPeriod :: Planet -> Float
