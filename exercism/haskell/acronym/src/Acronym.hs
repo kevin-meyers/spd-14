@@ -2,34 +2,31 @@ module Acronym
   ( abbreviate
   ) where
 
-import Data.Char (isLower, isUpper, toLower, toUpper)
+import Data.Char (isAlpha, isLower, isUpper, toUpper)
 
-isDelimeter :: Char -> Bool
-isDelimeter y =
-  case y of
+isDelimiter :: Char -> Bool
+isDelimiter x =
+  case x of
     ' ' -> True
-    '-' -> True
     '_' -> True
+    '-' -> True
     _ -> False
 
-wordHeadTail :: String -> String -> (String, String)
-wordHeadTail "" word = (word, "")
-wordHeadTail [x] word = (x : word, "")
-wordHeadTail (x:y:xs) word
-  | isDelimeter x = (word, y : xs)
-  | isDelimeter y = (x : word, xs)
-  | isUpper y
-  , isLower x = (x : word, toLower y : xs)
-  | otherwise = x `appendFirst` wordHeadTail (y : xs) word
+abbreviate' :: String -> String
+abbreviate' "" = ""
+abbreviate' [x] = ""
+abbreviate' (x:y:xs)
+  | not $ isDelimiter x = abbreviate' $ y : xs
+  | isDelimiter y = abbreviate' $ y : xs
+  | otherwise = y : abbreviate' xs
 
-appendFirst :: a -> ([a], b) -> ([a], b)
-appendFirst x (xs, b) = (x : xs, b)
-
-split :: String -> [String]
-split "" = []
-split xs = word : split remainder
-  where
-    (word, remainder) = wordHeadTail xs ""
+fromCamel :: String -> String
+fromCamel [] = []
+fromCamel [x] = [x]
+fromCamel (x:y:xs)
+  | isLower y = x : fromCamel (y : xs)
+  | isUpper x = x : fromCamel (y : xs)
+  | otherwise = x : ' ' : y : fromCamel xs
 
 abbreviate :: String -> String
-abbreviate s = map (toUpper . head) (filter (/= []) (split s))
+abbreviate xs = map toUpper $ abbreviate' $ ' ' : fromCamel (map (\x -> case (isAlpha x) of True -> x False -> ' ') xs)

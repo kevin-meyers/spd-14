@@ -17,8 +17,7 @@ secondsPerYearsOnEarth :: Float
 secondsPerYearsOnEarth = 31557600
 
 ageOn :: Planet -> Float -> Float
-ageOn Earth = (/ secondsPerYearsOnEarth)
-ageOn p = (/ orbitalPeriod p) . ageOn Earth
+ageOn p s = s / secondsPerYearsOnEarth / orbitalPeriod p
 
 orbitalPeriod :: Planet -> Float
 orbitalPeriod Mercury = 0.2408467
