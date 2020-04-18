@@ -7,8 +7,7 @@ import Data.Set (Set)
 import qualified Data.Set as S
 
 isPangram :: String -> Bool
-isPangram s =
-  null $ foldr (removeExisting . toUpper) (S.fromList ['A' .. 'Z']) s
+isPangram = null . foldr (removeExisting . toUpper) (S.fromList ['A' .. 'Z'])
 
 removeExisting :: (Ord a) => a -> Set a -> Set a
 removeExisting x acc
