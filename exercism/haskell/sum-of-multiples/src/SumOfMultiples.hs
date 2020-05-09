@@ -2,33 +2,15 @@ module SumOfMultiples
   ( sumOfMultiples
   ) where
 
+import Data.Set (Set)
+import qualified Data.Set as Set
+
 sumOfMultiples :: [Integer] -> Integer -> Integer
-sumOfMultiples factors limit =
-  sum . removeDupsSorted . mergeSort $ foldr combine [] factors
+sumOfMultiples factors limit = sum allFactorsSet
   where
-    combine f acc = findMultiples limit f ++ acc
+    combine x = Set.union . multiplesSet limit
+    allFactorsSet = foldr combine Set.empty factors
 
-findMultiples :: Integer -> Integer -> [Integer]
-findMultiples _ 0 = []
-findMultiples limit x = takeWhile (< limit) (map (x *) [1 ..])
-
-mergeSort :: [Integer] -> [Integer]
-mergeSort [] = []
-mergeSort [x] = [x]
-mergeSort xs = merge (mergeSort $ take half xs) (mergeSort $ drop half xs)
-  where
-    half = length xs `div` 2
-
-merge :: [Integer] -> [Integer] -> [Integer]
-merge [] ys = ys
-merge xs [] = xs
-merge (x:xs) (y:ys)
-  | x < y = x : merge xs (y : ys)
-  | otherwise = y : merge (x : xs) ys
-
-removeDupsSorted :: [Integer] -> [Integer]
-removeDupsSorted [] = []
-removeDupsSorted [x] = [x]
-removeDupsSorted (x:y:xs)
-  | x == y = removeDupsSorted $ x : xs
-  | otherwise = x : removeDupsSorted (y : xs)
+multiplesSet :: Integer -> Integer -> Set Integer
+multiplesSet _ 0 = Set.empty
+multiplesSet limit x = Set.fromAscList [x,x * 2 .. (limit - 1)]

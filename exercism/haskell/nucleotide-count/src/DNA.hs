@@ -1,10 +1,12 @@
+{-# LANGUAGE TupleSections #-}
+
 module DNA
   ( nucleotideCounts
   , Nucleotide(..)
   ) where
 
 import Data.Map (Map)
-import qualified Data.Map as Map
+import qualified Data.Map as M
 
 import Control.Monad (foldM)
 
@@ -16,20 +18,16 @@ data Nucleotide
   deriving (Eq, Ord, Show)
 
 nucleotideCounts :: String -> Either String (Map Nucleotide Int)
-nucleotideCounts =
-  foldM (\acc x -> maybe (Left "GOD WHY") (`addOne` acc) (parse x)) dict
+nucleotideCounts = foldM addOne dict
   where
-    dict = Map.fromList [(A, 0), (C, 0), (G, 0), (T, 0)]
+    dict = M.fromList [(A, 0), (C, 0), (G, 0), (T, 0)]
 
-addOne :: Nucleotide -> Map Nucleotide Int -> Either String (Map Nucleotide Int)
-addOne x acc =
-  case Map.lookup x acc of
-    Nothing -> Left "NOT IN"
-    Just i -> Right $ Map.insert x (i + 1) acc
+addOne :: Map Nucleotide Int -> Char -> Either String (Map Nucleotide Int)
+addOne acc x = (\i -> M.adjust (+ 1) i acc) <$> parse x
 
-parse :: Char -> Maybe Nucleotide
-parse 'A' = Just A
-parse 'C' = Just C
-parse 'G' = Just G
-parse 'T' = Just T
-parse _ = Nothing
+parse :: Char -> Either String Nucleotide
+parse 'A' = Right A
+parse 'C' = Right C
+parse 'G' = Right G
+parse 'T' = Right T
+parse x = Left $ x : " Is not a nucletide."
