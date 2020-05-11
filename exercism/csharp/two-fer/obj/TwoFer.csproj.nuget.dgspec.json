@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/kevin/workspace/makespace/spd/spd1.4/exercism/csharp/two-fer/TwoFer.csproj": {}
+    "/home/kevin/workspace/makespace/spd/1.4/exercism/csharp/two-fer/TwoFer.csproj": {}
   },
   "projects": {
-    "/home/kevin/workspace/makespace/spd/spd1.4/exercism/csharp/two-fer/TwoFer.csproj": {
+    "/home/kevin/workspace/makespace/spd/1.4/exercism/csharp/two-fer/TwoFer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/kevin/workspace/makespace/spd/spd1.4/exercism/csharp/two-fer/TwoFer.csproj",
+        "projectUniqueName": "/home/kevin/workspace/makespace/spd/1.4/exercism/csharp/two-fer/TwoFer.csproj",
         "projectName": "TwoFer",
-        "projectPath": "/home/kevin/workspace/makespace/spd/spd1.4/exercism/csharp/two-fer/TwoFer.csproj",
+        "projectPath": "/home/kevin/workspace/makespace/spd/1.4/exercism/csharp/two-fer/TwoFer.csproj",
         "packagesPath": "/home/kevin/.nuget/packages/",
-        "outputPath": "/home/kevin/workspace/makespace/spd/spd1.4/exercism/csharp/two-fer/obj/",
+        "outputPath": "/home/kevin/workspace/makespace/spd/1.4/exercism/csharp/two-fer/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/kevin/.nuget/NuGet/NuGet.Config"
@@ -74,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/home/kevin/dotnet/sdk/3.1.201/RuntimeIdentifierGraph.json"
         }
       }
     }
