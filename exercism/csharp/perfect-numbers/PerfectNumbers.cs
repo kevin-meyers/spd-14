@@ -12,82 +12,40 @@ public enum Classification
 
 public static class PerfectNumbers
 {
-    public static int newN(int n, int i, List<int> factors)
+    public static bool isFactor(int n, int i) => n % i == 0;
+
+    public static int GetNextPrime(int n, List<int> ps)
     {
-        int rem, div;
-        div = Math.DivRem(n, i, out rem);
-        if (rem == 0) 
-        {
-            factors.Add(i);
-            return div;
-        }
-        return n;
+        return isFactor(n, ps.Last()) ? ps.Last() : AddPrimes(n, ps);
     }
 
     public static List<int> PrimeFactors(int n)
     {
-        List<int> primes = new List<int>{2, 3};
+        List<int> primes = new List<int>{2};
         List<int> factors = new List<int>{};
         while (n > 1)
         {
-            bool found = false;
-            foreach(int i in primes)
-            {
-                int rem, div;
-                div = Math.DivRem(n, i, out rem);
-                if (rem == 0) 
-                {
-                    factors.Add(i);
-                    n = div;
-                    found = true;
-                    break;
-                }
-            }
+            int p = GetNextPrime(n, primes);
 
-            if (found) continue;
-
-            for (int j=primes.Last(); j<=n; j+=2)
-            {
-                if (!primes.Any(x => j % x == 0))
-                {
-                    int rem, div;
-                    primes.Add(j);
-                    div = Math.DivRem(n, j, out rem);
-                    if (rem == 0) 
-                    {
-                        n = div;
-                        factors.Add(j);
-                        break;
-                    }
-                }
-            }
-        }
+            factors.Add(p);
+            n = n / p;
+       }
 
         return factors;
     }
 
-    public static void Print(int[] xs) => Print(xs.ToList());
-    
-    public static void Print(List<int> xs)
+    public static int AddPrimes(int n, List<int> primes)
     {
-        Console.Write('[');
-        foreach (int x in xs)
+        for (int i=primes.Last(); i<Math.Sqrt(n); i+=2)
         {
-            Console.Write(x);
-            Console.Write(',');
+            if (i == 2) i = 3;
+            if (!primes.Any(x => isFactor(i, x)))
+            {
+                primes.Add(i);
+                if (isFactor(n, i)) return i;
+            }
         }
-        Console.Write(']');
-    }
-
-
-    public static void Print(List<List<int>> ls)
-    {
-        Console.Write('[');
-        foreach (List<int> xs in ls)
-        {
-            Print(xs);
-        }
-        Console.WriteLine(']');
+        return n;
     }
 
     public static List<List<int>> GroupOf(List<int> l)
@@ -137,8 +95,6 @@ public static class PerfectNumbers
 
     public static List<int> Prod(List<List<int>> ls)
     {
- //       Print(ls);
- //       Console.WriteLine("");
         
         for (int i=0; i<ls.Count; i++)
         {
@@ -147,20 +103,23 @@ public static class PerfectNumbers
                 ls[j].AddRange(CartProd(ls[i], ls[j]));
             }
         }
-        ls.ForEach(x=>Console.WriteLine(x.Count));
-        Console.WriteLine(ls);
         return Flatten(ls);
 
     }
 
+    public static Classification ClassOf(int n, int sum)
+    {
+        if (sum > n) return Classification.Abundant;
+        if (sum < n) return Classification.Deficient;
+        return Classification.Perfect;
+    }
+
     public static Classification Classify(int number)
     {
+        if (number == 1) return Classification.Deficient;
+        if (number < 1) throw new ArgumentOutOfRangeException();
+
         List<int> factors = Prod(ScanEach(GroupOf(PrimeFactors(number)), (x, y) => x*y));
-        //Print(factors);
-        //Console.WriteLine(factors.Count);
-        int sum = factors.Sum() - number + 1;
-        if (sum > number) return Classification.Abundant;
-        if (sum < number) return Classification.Deficient;
-        return Classification.Perfect;
+        return ClassOf(number, factors.Sum() - number + 1);
     }
 }
